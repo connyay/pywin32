@@ -16,10 +16,10 @@ environment:
     #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013 # Can be used to override the image, which shall be used.
     - PYTHON_MAJOR: 2
       PYTHON_MINOR: 7
-    - PYTHON_MAJOR: 3
-      PYTHON_MINOR: 5
-    - PYTHON_MAJOR: 3
-      PYTHON_MINOR: 6
+    # - PYTHON_MAJOR: 3
+    #   PYTHON_MINOR: 5
+    # - PYTHON_MAJOR: 3
+    #   PYTHON_MINOR: 6
 
 install:
   # Prepare environment
@@ -33,7 +33,7 @@ install:
 
   # Install setuptools/wheel so that we can e.g. use bdist_wheel
   - pip install --upgrade setuptools wheel
-  
+
   ## Use Chocolatey to install SWIG.
   #- set SWIG=C:\ProgramData\chocolatey\bin\swig.exe
   #- if not exist %SWIG% choco install swig --version 3.0.9 --yes --limit-output
@@ -49,11 +49,14 @@ init:
   - if "%PYTHON_MAJOR%"=="2" if "%PYTHON_MINOR%"=="7" set VC_VERSION=9.0
   - if "%PYTHON_MAJOR%"=="2" if "%PYTHON_MINOR%"=="6" set VC_VERSION=9.0
   - call "C:\Program Files (x86)\Microsoft Visual Studio %VC_VERSION%\VC\vcvarsall.bat" %VC_ARCH%
-  
+
   # RDP session for debugging
   #- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 build_script:
+  - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 9.0" -type f -name '*.mfc'
+  - choco install vcredist2008
+  - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 9.0" -type f -name '*.mfc'
   - python setup.py build
 
 test_script:
