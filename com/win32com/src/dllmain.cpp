@@ -81,18 +81,13 @@ void PyCom_DLLAddRef(void)
 			// Release Python lock, as first thing we do is re-get it.
 			ptsGlobal = PyEval_SaveThread();
 			bDidInitPython=TRUE;
-			// NOTE: We no longer ever finalize Python!!
 		}
 	}
 }
 void PyCom_DLLReleaseRef(void)
 {
-	/*** NOTE: We no longer finalize Python EVER in the COM world
-	     see pycom-dev mailing list archives from April 2000 for why
-	***/
 	// Must be thread-safe, although cant have the Python lock!
-// only needed when we finalize.
-//	CEnterLeaveFramework _celf;
+	CEnterLeaveFramework _celf;
 	LONG cnt = InterlockedDecrement(&g_cLockCount);
 	// Not optimal, but anything better is hard - g_cLockCount
 	// could always transition 1->0->1 at some stage, screwing this
@@ -101,7 +96,6 @@ void PyCom_DLLReleaseRef(void)
 		// Send a quit message to the registered thread (if we have one)
 		if (dwQuitThreadId)
 			PostThreadMessage(dwQuitThreadId, WM_QUIT, 0, 0);
-/*** Old finalize code
 		if (bDidInitPython) {
 			PyEval_RestoreThread(ptsGlobal);
 			PyWinGlobals_Free();
@@ -110,7 +104,6 @@ void PyCom_DLLReleaseRef(void)
 
 			bDidInitPython=FALSE;
 		}
-***/
 	}
 }
 
