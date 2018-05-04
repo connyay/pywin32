@@ -29,7 +29,7 @@ static PyThreadState *ptsGlobal = NULL;
 
 /*
 ** To support servers in .EXE's, PythonCOM allows you to register a threadID.
-** A WM_QUIT message will be posted this thread when the external locks on the 
+** A WM_QUIT message will be posted this thread when the external locks on the
 ** objects hits zero.
 */
 static DWORD dwQuitThreadId = 0;
@@ -45,7 +45,7 @@ void PyCom_DLLAddRef(void)
 	// Must be thread-safe, although cant have the Python lock!
 	CEnterLeaveFramework _celf;
 	LONG cnt = InterlockedIncrement(&g_cLockCount);
-	if (cnt==1) { // First call 
+	if (cnt==1) { // First call
 		// There is a situation where this code falls down.  An IClassFactory destructor
 		// imcrements the DLL ref count, to make up for the decrement done by PyIUnknown
 		// (as we don't want class factories in the count).  This works fine until the last
@@ -148,7 +148,7 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
 //			CEnterLeavePython celp;
 			/* free the gateway module if loaded (see PythonCOMObj.cpp) */
 
-//			(void)PyCom_UnregisterCoreSupport();
+			(void)PyCom_UnregisterCoreSupport();
 		}
 		// Call our helper to do smart Uninit of OLE.
 // XXX - this seems to regularly hang - probably because it is being
@@ -170,8 +170,6 @@ typedef HRESULT (WINAPI *PFNCoInitializeEx)(LPVOID pvReserved, DWORD dwCoInit);
 // XXX - Needs more thought about threading implications.
 HRESULT PyCom_CoInitializeEx(LPVOID reserved, DWORD dwInit)
 {
-	// Must be thread-safe, although doesnt need the Python lock.
-	CEnterLeaveFramework _celf;
 	if (g_bCoInitThreadHasInit && g_dwCoInitThread == GetCurrentThreadId())
 		return S_OK;
 #ifndef MS_WINCE
@@ -209,8 +207,6 @@ HRESULT PyCom_CoInitializeEx(LPVOID reserved, DWORD dwInit)
 
 HRESULT PyCom_CoInitialize(LPVOID reserved)
 {
-	// Must be thread-safe, although doesnt need the Python lock.
-	CEnterLeaveFramework _celf;
 	// If our "main" thread has ever called this before, just
 	// ignore it.  If it is another thread, then that thread
 	// must manage itself.
@@ -237,8 +233,6 @@ HRESULT PyCom_CoInitialize(LPVOID reserved)
 
 void PyCom_CoUninitialize()
 {
-	// Must be thread-safe, although doesnt need the Python lock.
-	CEnterLeaveFramework _celf;
 	if (g_dwCoInitThread == GetCurrentThreadId()) {
 		// being asked to terminate on our "main" thread
 		// Check our flag, but always consider it success.
@@ -307,7 +301,7 @@ HRESULT DoRegisterUnregister(LPCSTR fileName, int argc, char **argv)
 #else
 		PySys_SetArgv(argc, __wargv);
 #endif;
-	
+
 		if (PyRun_SimpleFile(fp, (char *)fileName) != 0) {
 			// Convert the Python error to a HRESULT.
 			hr = PyCom_SetCOMErrorFromPyException();
