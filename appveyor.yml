@@ -86,9 +86,9 @@ after_test:
   - python setup.py bdist_wheel --skip-build
   - python setup.py bdist_wininst --skip-build --target-version=%PYTHON_MAJOR%.%PYTHON_MINOR%
 
-#artifacts:
+artifacts:
   # bdist_wheel puts your built wheel in the dist directory
-  #- path: dist\*
+  - path: dist\*
 
 #on_success:
 #  You can use this step to upload your artifacts to a public website.
