@@ -257,9 +257,7 @@ void PyCom_CoUninitialize()
 
 STDAPI DllCanUnloadNow(void)
 {
-	// If we dont finalize Python, we should never unload!
-	return S_FALSE;
-//	return g_cLockCount ? S_FALSE : S_OK;
+	return g_cLockCount ? S_FALSE : S_OK;
 }
 
 /////////////////////////////////////////////////////////////////////////////
