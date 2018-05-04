@@ -59,9 +59,9 @@ build_script:
   - choco install vcredist2008
   - mkdir "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\redist\x86\Microsoft.VC90.MFC"
   - mkdir "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\redist\amd64\Microsoft.VC90.MFC"
-  - ps: Copy-Item "C:\Windows\WinSxS\Manifests\x86_microsoft.vc90.mfc_*9.0.30729.6161*\*.manifest" -Destination "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\redist\x86\Microsoft.VC90.MFC\Microsoft.VC90.MFC.manifest"
+  - ps: Copy-Item "C:\Windows\WinSxS\Manifests\x86_microsoft.vc90.mfc_*9.0.30729.6161*.manifest" -Destination "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\redist\x86\Microsoft.VC90.MFC\Microsoft.VC90.MFC.manifest"
   - ps: Copy-Item "C:\Windows\WinSxS\x86_microsoft.vc90.mfc_*9.0.30729.6161*\*" -Destination "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\redist\x86\Microsoft.VC90.MFC" -Recurse
-  - ps: Copy-Item "C:\Windows\WinSxS\Manifests\amd64_microsoft.vc90.mfc_*9.0.30729.6161*\*.manifest" -Destination "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\redist\amd64\Microsoft.VC90.MFC\Microsoft.VC90.MFC.manifest"
+  - ps: Copy-Item "C:\Windows\WinSxS\Manifests\amd64_microsoft.vc90.mfc_*9.0.30729.6161*.manifest" -Destination "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\redist\amd64\Microsoft.VC90.MFC\Microsoft.VC90.MFC.manifest"
   - ps: Copy-Item "C:\Windows\WinSxS\amd64_microsoft.vc90.mfc_*9.0.30729.6161*\*" -Destination "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\redist\amd64\Microsoft.VC90.MFC" -Recurse
   - C:\cygwin\bin\find "C:\Program Files (x86)\Microsoft Visual Studio 9.0" -type f -name '*.mfc'
   - python setup.py build
